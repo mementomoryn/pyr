@@ -22,6 +22,8 @@ class GitHubManager(ReleaseManager):
             branch_name=branch_name,
             updates_file=updates_file,
         )
+        self.request_url = urllib.request.Request(self.update_file_url)
+        self.request_url.add_header('Authorization', 'Bearer ${GH_PAT}')
 
     def get_last_version(self: Self, app: APP, resource_name: str) -> str:
         """Get last patched version."""
@@ -29,7 +31,7 @@ class GitHubManager(ReleaseManager):
             with Path(updates_file).open() as url:
                 data = json.load(url)
         else:
-            with urllib.request.urlopen(self.update_file_url) as url:
+            with urllib.request.urlopen(self.request_url) as url:
                 data = json.load(url)
         if data.get(app.app_name):
             return str(data[app.app_name][resource_name])
@@ -41,7 +43,7 @@ class GitHubManager(ReleaseManager):
             with Path(updates_file).open() as url:
                 data = json.load(url)
         else:
-            with urllib.request.urlopen(self.update_file_url) as url:
+            with urllib.request.urlopen(self.request_url) as url:
                 data = json.load(url)
         if data.get(app.app_name):
             return str(data[app.app_name][app_dump_key][resource_name])
