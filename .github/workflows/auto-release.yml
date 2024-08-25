@@ -43,6 +43,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Replace PAT with secrets
+        uses: cschleiden/replace-tokens@master
+        with:
+          tokenPrefix: '${'
+          tokenSuffix: '}'
+          files: '["src/manager/github.py"]'
+        env :
+          GH_PAT: ${{ secrets.WORKFLOW_TOKEN }}
+
       - name: Should build?
         id: should_build
         shell: bash
