@@ -75,3 +75,4 @@ jobs:
     with:
       TELEGRAM_NO_ROOT_UPLOAD: false
       PREFERRED_PATCH_APPS: ${{ needs.release-check.outputs.SHOULD_BUILD }}
+      CLEANUP: false
